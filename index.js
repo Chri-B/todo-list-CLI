@@ -1,4 +1,12 @@
-const fs = require("fs");
+import chalk from "chalk";
+
+const chalk_report_done = chalk.bgGreenBright;
+const chalk_report_pending = chalk.bgYellow;
+const chalk_highlight = chalk.bold.green;
+const chalk_error = chalk.whiteBright.bgRed.bold;
+const chalk_warning = chalk.bold.hex("#FFD600");
+
+import * as fs from "fs";
 
 const args = process.argv;
 
@@ -46,7 +54,7 @@ const listFunction = (isDone) => {
   });
 
   if (filterData.length === 0) {
-    console.log(isDone ? "There are no done todos!" : "There are no pending todos!");
+    console.log(chalk_warning(isDone ? "There are no done todos!" : "There are no pending todos!"));
   }
   for (let i = 0; i < filterData.length; i++) {
     console.log(i + 1 + `. ${filterData[i]}`);
@@ -76,12 +84,12 @@ const addFunction = () => {
         if (err) throw err;
 
         // Logs the new task added
-        console.log('Added todo: "' + newTask + '"');
+        console.log('Added todo: "' + chalk_highlight(newTask) + '"');
       }
     );
   } else {
     // If argument was no passed
-    console.log("Error: Missing todo string." + " Nothing added!");
+    console.log(chalk_error("Error: Missing todo string." + " Nothing added!"));
   }
 };
 
@@ -97,6 +105,14 @@ const deleteFunction = () => {
 
         // Logs the deleted index
         console.log("All todos has been deleted!");
+      });
+    }
+    if (deleteIndex === "all-done") {
+      return fs.writeFile(currentWorkingDirectory + "done.txt", "", function (err) {
+        if (err) throw err;
+
+        // Logs the deleted index
+        console.log("All done todos has been deleted!");
       });
     }
     // Create a empty array
@@ -115,7 +131,7 @@ const deleteFunction = () => {
     // If delete index is greater than no. of task
     // or less than zero
     if (deleteIndex > filterData.length || deleteIndex <= 0) {
-      console.log("Error: todo #" + deleteIndex + " does not exist. Nothing deleted.");
+      console.log(chalk_error("Error: todo #" + deleteIndex + " does not exist. Nothing deleted."));
     } else {
       // Remove the task
       filterData.splice(deleteIndex - 1, 1);
@@ -128,12 +144,12 @@ const deleteFunction = () => {
         if (err) throw err;
 
         // Logs the deleted index
-        console.log("Deleted todo #" + deleteIndex);
+        console.log("Deleted todo " + chalk_highlight("#" + deleteIndex));
       });
     }
   } else {
     // Index argument was no passed
-    console.log("Error: Missing NUMBER for deleting todo.");
+    console.log(chalk_error("Error: Missing NUMBER for deleting todo."));
   }
 };
 
@@ -170,7 +186,7 @@ const doneFunction = () => {
     // If done index is greater than
     // no. of task or <=0
     if (doneIndex > filterData.length || doneIndex <= 0) {
-      console.log("Error: todo #" + doneIndex + " does not exist.");
+      console.log(chalk_error("Error: todo #" + doneIndex + " does not exist."));
     } else {
       // Delete the task from todo.txt data
       // and store it
@@ -195,13 +211,13 @@ const doneFunction = () => {
         "✓ " + deleted + ` (${dateString})` + "\n" + doneData,
         function (err) {
           if (err) throw err;
-          console.log("Marked todo #" + doneIndex + " as done.");
+          console.log("Marked todo " + chalk_highlight("#" + doneIndex) + " as done.");
         }
       );
     }
   } else {
     // If argument was not passed
-    console.log("Error: Missing NUMBER for " + "marking todo as done.");
+    console.log(chalk_error("Error: Missing NUMBER for " + "marking todo as done."));
   }
 };
 
@@ -235,7 +251,7 @@ const reportFunction = () => {
     // Filter both the data for empty lines
   });
   console.log(
-    dateString + " " + "Pending : " + filterTodoData.length + " Completed : " + filterDoneData.length
+    dateString + " " + chalk_report_pending("Pending : " + chalk.bold(filterTodoData.length)) + " " + chalk_report_done("Completed : " + chalk.bold(filterDoneData.length))
     // Log the stats calculated
   );
 };

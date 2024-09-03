@@ -14,5 +14,9 @@
     "help": "node index.js help"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.3.0"
+  },
+  "type": "module"
 }
