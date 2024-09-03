@@ -29,7 +29,7 @@ Usage :-
 $ npm run add "todo item"       # Add a new todo
 $ npm run ls                    # Show remaining todos
 $ npm run ls-done               # Show done todos
-$ npm run del [NUMBER]          # Delete a todo
+$ npm run del [NUMBER]          # Delete a todo (accept todo number, 'all', 'last', 'all-done')
 $ npm run done [NUMBER]         # Complete a todo
 $ npm run help                  # Show usage
 $ npm run report                # Statistics`;
