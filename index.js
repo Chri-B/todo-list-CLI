@@ -91,6 +91,14 @@ const deleteFunction = () => {
 
   // If index is passed
   if (deleteIndex) {
+    if (deleteIndex === "all") {
+      return fs.writeFile(currentWorkingDirectory + "todo.txt", "", function (err) {
+        if (err) throw err;
+
+        // Logs the deleted index
+        console.log("All todos has been deleted!");
+      });
+    }
     // Create a empty array
     let data = [];
 
@@ -184,7 +192,7 @@ const doneFunction = () => {
         // Write the stored task in done.txt
         // along with date string
         currentWorkingDirectory + "done.txt",
-        '✓ ' + deleted + ` (${dateString})` + "\n" + doneData,
+        "✓ " + deleted + ` (${dateString})` + "\n" + doneData,
         function (err) {
           if (err) throw err;
           console.log("Marked todo #" + doneIndex + " as done.");
