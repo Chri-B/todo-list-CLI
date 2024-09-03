@@ -134,7 +134,7 @@ const deleteFunction = () => {
       console.log(chalk_error("Error: todo #" + deleteIndex + " does not exist. Nothing deleted."));
     } else {
       // Remove the task
-      filterData.splice(deleteIndex - 1, 1);
+      filterData.splice(deleteIndex === "last" ? filterData.length - 1 : deleteIndex - 1, 1);
 
       // Join the array to form a string
       const newData = filterData.join("\n");
@@ -144,7 +144,7 @@ const deleteFunction = () => {
         if (err) throw err;
 
         // Logs the deleted index
-        console.log("Deleted todo " + chalk_highlight("#" + deleteIndex));
+        console.log("Deleted todo " + chalk_highlight("#" + (deleteIndex === "last" ? filterData.length + 1 : deleteIndex)));
       });
     }
   } else {
