@@ -8,6 +8,7 @@
     "ls": "node index.js ls",
     "ls-done": "node index.js ls-done",
     "add": "node index.js add",
+    "overwrite": "node index.js overwrite",
     "del": "node index.js del",
     "done": "node index.js done",
     "report": "node index.js report",

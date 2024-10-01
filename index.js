@@ -26,13 +26,14 @@ if (fs.existsSync(currentWorkingDirectory + "done.txt") === false) {
 const InfoFunction = () => {
   const UsageText = `
 Usage :-
-$ npm run add "todo item"       # Add a new todo
-$ npm run ls                    # Show remaining todos
-$ npm run ls-done               # Show done todos
-$ npm run del [NUMBER]          # Delete a todo (accept todo number, 'all', 'last', 'all-done')
-$ npm run done [NUMBER]         # Complete a todo
-$ npm run help                  # Show usage
-$ npm run report                # Statistics`;
+$ npm run add "todo item"                   # Add a new todo
+$ npm run ls                                # Show remaining todos
+$ npm run ls-done                           # Show done todos
+$ npm run overwrite [NUMBER] [NEW_TASK]     # Overwrite a todo (accept todo number, 'all', 'last', 'all-done')
+$ npm run del [NUMBER]                      # Delete a todo (accept todo number, 'all', 'last', 'all-done')
+$ npm run done [NUMBER]                     # Complete a todo
+$ npm run help                              # Show usage
+$ npm run report                            # Statistics`;
 
   console.log(UsageText);
 };
@@ -90,6 +91,52 @@ const addFunction = () => {
   } else {
     // If argument was no passed
     console.log(chalk_error("Error: Missing todo string." + " Nothing added!"));
+  }
+};
+
+const overwriteFunction = () => {
+  // New todo string argument is stored
+  const newTask = args[4];
+  const indexOverwrite = args[3];
+
+  // If argument is passed
+  if (newTask && indexOverwrite) {
+    // create a empty array
+    // Create a empty array
+    let data = [];
+
+    // Read the data from file and convert
+    // it into string
+    const fileData = fs.readFileSync(currentWorkingDirectory + "todo.txt").toString();
+
+    data = fileData.split("\n");
+    let filterData = data.filter(function (value) {
+      // Filter the data for any empty lines
+      return value !== "";
+    });
+
+    // If delete index is greater than no. of task
+    // or less than zero
+    if (indexOverwrite > filterData.length || indexOverwrite <= 0) {
+      console.log(chalk_error("Error: todo #" + indexOverwrite + " does not exist. Nothing edited."));
+    } else {
+      // Remove the task
+      filterData[indexOverwrite - 1] = newTask;
+
+      // Join the array to form a string
+      const newData = filterData.join("\n");
+
+      // Write the new data back in file
+      fs.writeFile(currentWorkingDirectory + "todo.txt", newData, function (err) {
+        if (err) throw err;
+
+        // Logs the deleted index
+        console.log("Overwrite todo " + chalk_highlight("#" + indexOverwrite));
+      });
+    }
+  } else {
+    // If argument was no passed
+    console.log(chalk_error("Error: Missing todo string." + " Nothing edited!"));
   }
 };
 
@@ -259,6 +306,11 @@ const reportFunction = () => {
 switch (args[2]) {
   case "add": {
     addFunction();
+    break;
+  }
+
+  case "overwrite": {
+    overwriteFunction();
     break;
   }
 
